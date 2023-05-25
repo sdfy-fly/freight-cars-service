@@ -1,4 +1,5 @@
 from celery import shared_task
+import random
 
 from src.car.models import Car
 from src.location.models import Location
@@ -12,3 +13,11 @@ def generate_cars():
         for i in range(20 - car_count):
             car = Car.create_random_car(locations)
             Car.objects.create(**car)
+
+
+@shared_task
+def update_car_location():
+    locations = Location.objects.all()
+    for car in (x for x in Car.objects.all()):
+        car.current_location = random.choice(locations)
+        car.save()

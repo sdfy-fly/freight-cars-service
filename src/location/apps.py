@@ -8,8 +8,5 @@ class LocationConfig(AppConfig):
 
     def ready(self):
         if os.environ.get('RUN_MAIN'):
-            print("Метод ready: src.location.apps.LocationConfig")
-
-            # TODO: запуск задачи
-            # from .tasks import process_location_table
-            # process_location_table.delay()
+            from .tasks import process_location_table
+            process_location_table.delay()

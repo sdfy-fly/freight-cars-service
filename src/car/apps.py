@@ -9,7 +9,12 @@ class CarConfig(AppConfig):
 
     def ready(self):
         if os.environ.get('RUN_MAIN'):
-            pass
-            # TODO: запуск задачи
-            # from .tasks import generate_cars
-            # generate_cars.delay()
+            from .tasks import generate_cars
+            generate_cars.apply_async(
+                retry=True,
+                retry_policy={
+                    'max_retries': 3,
+                    'interval_start': 30,
+                    'interval_step': 60,
+                }
+            )

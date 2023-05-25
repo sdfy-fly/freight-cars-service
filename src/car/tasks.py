@@ -19,5 +19,6 @@ def generate_cars():
 def update_car_location():
     locations = Location.objects.all()
     for car in (x for x in Car.objects.all()):
-        car.current_location = random.choice(locations)
-        car.save()
+        if len(locations) > 0:
+            car.current_location = random.choice(locations)
+            car.save()
